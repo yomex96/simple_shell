@@ -4,8 +4,6 @@
 #include <unistd.h>
 #include "main.h"
 
-void pushcmd(char **argv);
-
 int main(int ac, char **argv)
 {
 	char *prompt = "(south) $ ";
@@ -27,7 +25,7 @@ int main(int ac, char **argv)
 
 	if (hd_retval == -1) /** checks if getline func fails **/
 	{
-		printf("Quitting shell...\n");
+		printf("Exit shell...\n");
 		free(lineptr); /** free allocated memory **/
 		return (-1);
 	}
@@ -35,7 +33,7 @@ int main(int ac, char **argv)
 	lineptr_copy = malloc(sizeof(char) * hd_retval);
 	if (lineptr_copy == NULL)
 	{
-		perror("tsh: memory allocation error");
+		perror("tsh: The  memory allocation error");
 		free(lineptr); /** free allocated memory **/
 		return (-1);
 	}
@@ -56,7 +54,7 @@ int main(int ac, char **argv)
 
 	for (i = 0; token != NULL; i++)
 	{
-		argv[i] = malloc(sizeof(char) * strlen(token));
+		argv[i] = malloc(sizeof(char) * (strlen(token) + 1));
 		strcpy(argv[i], token);
 		token = strtok(NULL, delim);
 	}

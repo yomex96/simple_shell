@@ -11,7 +11,8 @@ void pushcmd(char **argv)
 
 	if (execve(exact_execute, argv, NULL) == -1)
 	{
-	perror("Error executing command:");
+		perror("Error executing command:");
+		exit(EXIT_FAILURE);
 	}
 
 	free(exact_execute); /* Clean up allocated memory */

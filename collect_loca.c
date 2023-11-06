@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
-	char *collect_loca(char *execute)
+char *collect_loca(char *execute)
 {
 	char *path = getenv("PATH");
 	char *path_copy, *path_token, *file_path = NULL;
@@ -12,14 +12,14 @@
 
 	if (!path)
 	{
-	return NULL;
+	return (NULL);
 	}
 
 	path_copy = strdup(path);
 	if (!path_copy)
 	{
-	perror("Error: Memory allocation failure");
-	return NULL;
+	perror("Error: Memory allocation failed");
+	return (NULL);
 	}
 
 	execute_len = strlen(execute);
@@ -28,13 +28,13 @@
 	while (path_token != NULL)
 	{
 		pathdirect_len = strlen(path_token);
-		file_path = malloc(execute_len + pathdirect_len + 2);
+		file_path = malloc(execute_len + pathdirect_len + 1);
 
 		if (!file_path)
 		{
-		perror("Error: Memory allocation failure");
+		perror("Error: Memory allocation failed");
 		free(path_copy);
-		return NULL;
+		return (NULL);
 		}
 
 		strcpy(file_path, path_token);
@@ -44,21 +44,17 @@
 		if (stat(file_path, &buffer) == 0)
 		{
 		free(path_copy);
-		return file_path;
+		return (file_path);
 		}	
 		else
 		{
 		free(file_path);
 		path_token = strtok(NULL, ":");
 		}
+		if (stat(execute, &buffer) == 0)
+		{
+			return (execute);
+		}
 	}
-
-	free(path_copy);
-
-    	if (stat(execute, &buffer) == 0) 
-	{
-	return execute;
-	}
-
-	return NULL;
+	return (NULL);
 }
