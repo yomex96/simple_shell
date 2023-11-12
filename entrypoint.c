@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
 	while (1)
 	{
-		if (isatty(STDIN_FILENO) == 1)
+		fs = getline(&str, &buff_size, stdin);if (isatty(STDIN_FILENO) == 1)
 			write(1, "$ ", 2);
 		fs = getline(&str, &buff_size, stdin);
 		if (fs == -1)
@@ -41,7 +41,13 @@ int main(int argc, char *argv[])
 }
 /**
  * readcmd - handles command line and tokenizes it
- *@s: string
+ *@s: strif (fs == -1)
+                {
+                        if (isatty(STDIN_FILENO) == 1)
+                                write(1, "\n", 1);
+                        break;
+                }
+ing
  *@file_stream: getline input
  * Return: 0
  */
