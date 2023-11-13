@@ -22,5 +22,7 @@ void print_not_found(char *cmd);
 int call_command(char *cmd_arr[]);
 char *__mygetenv(char *var);
 int __mystrncmp(char *s1, char *s2, int n);
+int mysetenv(char *variable, char *value, int overwrite);
+int myunsetenv(char *variable);
 #endif
 

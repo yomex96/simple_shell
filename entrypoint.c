@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
 	while (1)
 	{
-		fs = getline(&str, &buff_size, stdin);if (isatty(STDIN_FILENO) == 1)
+		if (isatty(STDIN_FILENO) == 1)
 			write(1, "$ ", 2);
 		fs = getline(&str, &buff_size, stdin);
 		if (fs == -1)
@@ -41,13 +41,7 @@ int main(int argc, char *argv[])
 }
 /**
  * readcmd - handles command line and tokenizes it
- *@s: strif (fs == -1)
-                {
-                        if (isatty(STDIN_FILENO) == 1)
-                                write(1, "\n", 1);
-                        break;
-                }
-ing
+ *@s: string
  *@file_stream: getline input
  * Return: 0
  */
@@ -59,8 +53,32 @@ int readcmd(char *s, size_t __attribute__((unused))file_stream)
 
 	if (__mystrcmp(s, "exit") == 0)
 		return (2);
-	if (__mystrcmp(s, "env") == 0)
+	else if (__mystrcmp(s, "env") == 0)
 		return (__printenv());
+	else if (__mystrncmp(s, "setenv", 6) == 0)
+	{
+		char *variable, *value;
+
+		variable = strtok(s + 7, " ");
+		value = strtok(NULL, " ");
+		if (variable != NULL && value != NULL)
+			return (mysetenv(variable, value, 1));
+		{
+			fprintf(stderr, "Usage: setenv VARIABLE VALUE\n");
+			return (-1);
+		}
+	}
+	else if (__mystrncmp(s, "unsetenv", 8) == 0)
+	{
+		char *variable = strtok(s + 9, " ");
+
+		if (variable != NULL)
+			return (myunsetenv(variable));
+		{
+			fprintf(stderr, "Usage: unsetenv VARIABLE\n");
+			return (-1);
+		}
+	}
 	tkn = strtok(s, " "), ab = 0;
 	while (tkn)
 	{
@@ -68,7 +86,6 @@ int readcmd(char *s, size_t __attribute__((unused))file_stream)
 		tkn = strtok(NULL, " ");
 	}
 	command_array[ab] = NULL;
-/* Return status code */
 	return (call_command(command_array));
 }
 /**
@@ -120,4 +137,5 @@ int call_command(char *cmd_arr[])
 	free(execute_path_string);
 	return (0);
 }
+
 
