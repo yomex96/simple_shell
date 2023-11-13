@@ -61,6 +61,9 @@ char *__mygetpath(char *command)
  */
 int mysetenv(char *variable, char *value, int overwrite)
 {
+	char *new_variable;
+	char *existing_value;
+
 	if (variable == NULL || value == NULL)
 	{
 		fprintf(stderr, "setenv: Invalid arguments\n");
@@ -68,36 +71,37 @@ int mysetenv(char *variable, char *value, int overwrite)
 	}
 
     /* Check if the variable already exists */
-	char *existing_value = __mygetenv(variable);
+	existing_value = __mygetenv(variable);
 
 	if (existing_value != NULL && overwrite == 0)
 	{
 		fprintf(stderr, "setenv: Variable '%s' already exists\n", variable);
-		return -1;
+		return (-1);
 	}
 
     /* Allocate memory for the new environment variable*/
-    char *new_variable = malloc(__mystrlen(variable) + __mystrlen(value) + 2);
+	new_variable = malloc(__mystrlen(variable) + __mystrlen(value) + 2);
 	/* +2 for '=' and '\0'*/
 
-    if (new_variable == NULL) {
-        perror("setenv");
-        return -1;
-    }
+	if (new_variable == NULL)
+	{
+		perror("setenv");
+		return (-1);
+	}
 
-    /* Concatenate the variable name, '=', and value*/
-    __mystrcpy(new_variable, variable);
-    __mystrcat(new_variable, "=");
-    __mystrcat(new_variable, value);
+	/* Concatenate the variable name, '=', and value*/
+	__mystrcpy(new_variable, variable);
+	__mystrcat(new_variable, "=");
+	__mystrcat(new_variable, value);
 
-    /* Set the new environment variable*/
-    if (putenv(new_variable) != 0) {
-        perror("setenv");
-        free(new_variable);
-        return -1;
-    }
-
-    return 0;
+	/* Set the new environment variable*/
+	if (putenv(new_variable) != 0)
+	{
+		perror("setenv");
+		free(new_variable);
+		return (-1);
+	}
+	return (0);
 }
 
 /**
@@ -106,17 +110,18 @@ int mysetenv(char *variable, char *value, int overwrite)
  *
  * Return: 0 on success, -1 on failure
  */
-int myunsetenv(char *variable) {
-    if (variable == NULL) {
-        fprintf(stderr, "unsetenv: Invalid argument\n");
-        return -1;
-    }
-
-    /* Use unsetenv to remove the environment variable */
-    if (unsetenv(variable) != 0) {
-        perror("unsetenv");
-        return -1;
-    }
-
-    return 0;
+int myunsetenv(char *variable)
+{
+	if (variable == NULL)
+	{
+		fprintf(stderr, "unsetenv: Invalid argument\n");
+		return (-1);
+	}
+	/* Use unsetenv to remove the environment variable */
+	if (unsetenv(variable) != 0)
+	{
+		perror("unsetenv");
+		return (-1);
+	}
+	return (0);
 }
